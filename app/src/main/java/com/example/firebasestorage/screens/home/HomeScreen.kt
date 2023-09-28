@@ -1,7 +1,5 @@
 package com.example.firebasestorage.screens.home
 
-import android.content.Intent
-import android.provider.Settings
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,30 +11,37 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.LocationOn
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.firebasestorage.InsertActivity
-import com.example.firebasestorage.LocationActivity
-import com.example.firebasestorage.navigation.ROUT_CONTACT
+
+
+
+import com.example.firebasestorage.R
+import com.example.firebasestorage.data.AuthViewModel
+import com.example.firebasestorage.navigation.ROUT_EXPLORE
 import com.example.firebasestorage.navigation.ROUT_LOGIN
-import com.example.firebasestorage.navigation.ROUT_SIGNUP
+import com.example.firebasestorage.navigation.ROUT_UPLOAD
 
 @Composable
-fun HomeScreen(navController:NavHostController) {
+fun HomeScreen(viewModel: AuthViewModel?, navController: NavHostController) {
     val mContext= LocalContext.current
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .paint(painterResource(id = R.drawable.logo), contentScale = ContentScale.FillBounds)) {
+
 
         //TopAppBar
-        TopAppBar(title = { Text(text = "HomePage") },
+        TopAppBar(title = { Text(text = "WELCOME TO All IN ONE")
+                          },
             navigationIcon = {
                 IconButton(onClick = {
                     navController.navigate(ROUT_LOGIN)
@@ -44,39 +49,24 @@ fun HomeScreen(navController:NavHostController) {
                     Icon(imageVector = Icons.Filled.ArrowBack , contentDescription = "arrowback")
                 }
             },
-            actions = {
-                IconButton(onClick = {
-                    val shareIntent= Intent(Intent.ACTION_SEND)
-                    shareIntent.type="text/plain"
-                    shareIntent.putExtra(Intent.EXTRA_TEXT, "Check out this is a cool content")
-                    mContext.startActivity(Intent.createChooser(shareIntent, "Share"))
 
-
-                }) {
-                    Icon(imageVector = Icons.Filled.Share , contentDescription = "share")
-                }
-                IconButton(onClick = {
-                    mContext.startActivity(Intent(mContext,LocationActivity::class.java))
-                }) {
-                    Icon(imageVector = Icons.Filled.LocationOn , contentDescription = "Location")
-                }
-            },
-            backgroundColor = Color.Green)
+            backgroundColor = Color.Cyan)
         Spacer(modifier = Modifier.height(20.dp))
 
         Button(onClick = {
-            navController.navigate(ROUT_CONTACT)
+            navController.navigate(ROUT_EXPLORE)
         }) {
-            Text(text = "Contact")
+            Text(text = "Explore Products & Services")
         }
 
 
         Spacer(modifier = Modifier.height(20.dp))
 
         Button(onClick = {
-            mContext.startActivity(Intent(mContext,InsertActivity::class.java))
+            navController.navigate(ROUT_UPLOAD)
+
         }) {
-            Text(text = "Courses Page")
+            Text(text = "Upload Product/Services")
         }
 
 
@@ -89,7 +79,7 @@ fun HomeScreen(navController:NavHostController) {
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {
-        HomeScreen(rememberNavController())
+        HomeScreen(null, rememberNavController())
 
 }
 

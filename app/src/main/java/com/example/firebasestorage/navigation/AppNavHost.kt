@@ -6,33 +6,42 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.firebasestorage.screens.contact.ContactScreen
+import com.example.firebasestorage.data.AuthViewModel
+import com.example.firebasestorage.screens.Explore.ExploreScreen
 import com.example.firebasestorage.screens.home.HomeScreen
 import com.example.firebasestorage.screens.login.LoginScreen
 import com.example.firebasestorage.screens.signup.SignupScreen
+import com.example.firebasestorage.screens.upload.UploadDataScreen
 
 
 @Composable
-fun AppNavHost(modifier: Modifier = Modifier, navController:NavHostController = rememberNavController(), startDestination:String = ROUT_LOGIN) {
-    NavHost(navController = navController, modifier=modifier, startDestination = startDestination){
-        composable(ROUT_HOME){
-            HomeScreen(navController)
+fun AppNavHost(
+    viewModel: AuthViewModel,
+    modifier: Modifier = Modifier,
+    navController: NavHostController = rememberNavController(),
+    startDestination: String = ROUT_LOGIN
+) {
+    NavHost(
+        modifier = modifier,
+        navController = navController,
+        startDestination = startDestination
+    ) {
+        composable(ROUT_LOGIN) {
+            LoginScreen(viewModel, navController)
+        }
+        composable(ROUT_SIGNUP) {
+            SignupScreen(viewModel, navController)
+        }
+        composable(ROUT_HOME) {
+            HomeScreen(viewModel, navController)
         }
 
-        composable(ROUT_LOGIN){
-            LoginScreen(navController)
+        composable(ROUT_UPLOAD) {
+            UploadDataScreen(viewModel, navController)
         }
 
-        composable(ROUT_SIGNUP){
-            SignupScreen(navController)
-        }
-
-        composable(ROUT_CONTACT){
-            ContactScreen(navController)
-        }
-
-        composable(ROUT_UPLOAD){
-            ContactScreen(navController)
+        composable(ROUT_EXPLORE) {
+            ExploreScreen(viewModel, navController)
         }
 
 
@@ -40,3 +49,6 @@ fun AppNavHost(modifier: Modifier = Modifier, navController:NavHostController = 
 
     }
 }
+
+
+

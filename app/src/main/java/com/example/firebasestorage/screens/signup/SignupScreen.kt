@@ -2,9 +2,6 @@ package com.example.firebasestorage.screens.signup
 
 import android.content.Intent
 import android.provider.Settings
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -29,16 +26,14 @@ import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Share
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
@@ -53,18 +48,16 @@ import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.firebasestorage.data.AuthViewModel
 import com.example.firebasestorage.navigation.ROUT_LOGIN
-import com.example.firebasestorage.navigation.ROUT_SIGNUP
-import com.example.firebasestorage.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignupScreen(navController: NavHostController) {
+fun SignupScreen(viewModel: AuthViewModel?, navController: NavHostController) {
     var mContext = LocalContext.current
     var username by remember { mutableStateOf(TextFieldValue("")) }
     var email by remember { mutableStateOf(TextFieldValue("")) }
     var password by remember { mutableStateOf(TextFieldValue("")) }
 
-    Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(modifier = Modifier.fillMaxSize()) {
 
         //TopAppBar
         TopAppBar(title = { Text(text = "Create an account")},
@@ -90,17 +83,16 @@ fun SignupScreen(navController: NavHostController) {
                     Icon(imageVector = Icons.Filled.Settings , contentDescription = "settings")
                 }
             },
-            backgroundColor = Color.Green)
+            backgroundColor = Color.Cyan)
 
 
         Spacer(modifier = Modifier.height(20.dp))
 
         //Lottie Animation
-        val composition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.register))
-        val progress by animateLottieCompositionAsState(composition )
-
-        LottieAnimation(composition, progress,
-            modifier = Modifier.size(300.dp))
+        //val composition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.register))
+        //val progress by animateLottieCompositionAsState(composition )
+       // LottieAnimation(composition, progress,
+          //  modifier = Modifier.size(300.dp)
 
         //Textfields
         Column(modifier = Modifier.padding(20.dp)) {
@@ -151,7 +143,7 @@ fun SignupScreen(navController: NavHostController) {
             var xyz = AuthViewModel(navController, mContext)
             xyz.signup(email.text.trim(),password.text.trim())
         },
-            colors = androidx.compose.material.ButtonDefaults.buttonColors(Color.Green),
+            colors = androidx.compose.material.ButtonDefaults.buttonColors(Color.Cyan),
             modifier = Modifier.width(300.dp),
             shape = CutCornerShape(5.dp)) {
             Text(text = "Register")
@@ -169,5 +161,9 @@ fun SignupScreen(navController: NavHostController) {
 @Preview(showBackground = true)
 @Composable
 fun SignupScreenPreview() {
-    SignupScreen(rememberNavController())
+
+
+
+
+    SignupScreen(null, rememberNavController())
 }

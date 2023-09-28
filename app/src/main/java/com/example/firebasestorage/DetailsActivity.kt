@@ -50,15 +50,15 @@ class DetailsActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
 
-            var courseList = mutableStateListOf<Courses?>()
+            var uploads = mutableStateListOf<Upload?>()
             var db: FirebaseFirestore = FirebaseFirestore.getInstance()
             db.collection("Courses").get()
                 .addOnSuccessListener { queryDocumentSnapshots ->
                     if (!queryDocumentSnapshots.isEmpty) {
                         val list = queryDocumentSnapshots.documents
                         for (d in list) {
-                            val c: Courses? = d.toObject(Courses::class.java)
-                            courseList.add(c)
+                            val c: Upload? = d.toObject(Upload::class.java)
+                            uploads.add(c)
 
                         }
                     } else {
@@ -68,14 +68,14 @@ class DetailsActivity : ComponentActivity() {
                 .addOnFailureListener {
                     Toast.makeText(this@DetailsActivity, "Fail to get the data.", Toast.LENGTH_SHORT).show()
                 }
-            firebaseUI(LocalContext.current, courseList)
+            firebaseUI(LocalContext.current, uploads)
         }
     }
 }
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 
-fun firebaseUI(context: Context, courseList: SnapshotStateList<Courses?>) {
+fun firebaseUI(context: Context, uploads: SnapshotStateList<Upload?>) {
     Column(modifier = Modifier
         .fillMaxHeight()
         .fillMaxWidth()
@@ -85,7 +85,7 @@ fun firebaseUI(context: Context, courseList: SnapshotStateList<Courses?>) {
     ) {
         //TopAppBar -displays information and actions relating to the current screen and is placed at the top of the screen.
         TopAppBar(
-            title = { Text("Course Details") },
+            title = { Text("Upload Details") },
             colors = TopAppBarDefaults.largeTopAppBarColors(Color.Green),
             navigationIcon = {
                 IconButton(onClick = {/* Do Something*/ }) {
@@ -101,15 +101,15 @@ fun firebaseUI(context: Context, courseList: SnapshotStateList<Courses?>) {
             })
 
         LazyColumn {
-            itemsIndexed(courseList) { index, item ->
+            itemsIndexed(uploads) { index, item ->
                 Card(onClick = {
-                    val i = Intent(context, UpdateDetailsActivity::class.java)
-                    i.putExtra("courseName", item?.courseName)
-                    i.putExtra("courseDuration", item?.courseDuration)
-                    i.putExtra("courseDescription", item?.courseDescription)
-                    i.putExtra("courseID", item?.courseID)
+                    val i = Intent(context, UpdateDeletedata::class.java)
+                    i.putExtra("Ighandle", item?.ighandle)
+                    i.putExtra("WhatsappContact", item?.Whatsappcontact)
+                    i.putExtra("Description", item?.Description)
+
                     context.startActivity(i)
-                    Toast.makeText(context, courseList[index]?.courseName + " selected..", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, item?.ighandle + " selected..", Toast.LENGTH_SHORT).show()
                 },
                     modifier = Modifier.padding(8.dp)
                 ) {
@@ -117,7 +117,7 @@ fun firebaseUI(context: Context, courseList: SnapshotStateList<Courses?>) {
                     ) {
                         Spacer(modifier = Modifier.width(5.dp))
 
-                        courseList[index]?.courseName?.let {
+                        item?.ighandle?.let {
                             Text(
                                 text = it,
                                 modifier = Modifier.padding(4.dp),
@@ -131,7 +131,7 @@ fun firebaseUI(context: Context, courseList: SnapshotStateList<Courses?>) {
 
                         Spacer(modifier = Modifier.height(5.dp))
 
-                        courseList[index]?.courseDuration?.let {
+                        item?.Whatsappcontact?.let {
                             Text(
                                 text = it,
                                 modifier = Modifier.padding(4.dp),
@@ -144,7 +144,7 @@ fun firebaseUI(context: Context, courseList: SnapshotStateList<Courses?>) {
                         }
                         Spacer(modifier = Modifier.width(5.dp))
 
-                        courseList[index]?.courseDescription?.let {
+                        item?.Description?.let {
                             Text(
                                 text = it,
                                 modifier = Modifier.padding(4.dp),
@@ -162,7 +162,7 @@ fun firebaseUI(context: Context, courseList: SnapshotStateList<Courses?>) {
 }
 @Preview(showBackground = true)
 @Composable
-fun CourseDetailsPreview() {
+fun UpUploadDataScreenPreview() {
 
 
 }

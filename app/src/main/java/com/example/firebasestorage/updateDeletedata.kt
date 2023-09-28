@@ -33,17 +33,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.firebase.firestore.FirebaseFirestore
 
-class UpdateDetailsActivity : ComponentActivity() {
+class UpdateDeletedata : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             firebaseUI(
                 LocalContext.current,
-                intent.getStringExtra("courseName"),
-                intent.getStringExtra("courseDuration"),
-                intent.getStringExtra("courseDescription"),
-                intent.getStringExtra("courseID")
+                intent.getStringExtra("Ighandle"),
+                intent.getStringExtra("Whatsappcontact"),
+                intent.getStringExtra("Description")
+
             )
         }
     }
@@ -51,11 +51,11 @@ class UpdateDetailsActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun firebaseUI(context: Context,name: String?, duration: String?, description: String?, courseID: String?) {
+fun firebaseUI(context: Context,Ighandle: String?, description: String?, Whatsappcontact: String?) {
 
-    val courseName = remember { mutableStateOf(name) }
-    val courseDuration = remember { mutableStateOf(duration) }
-    val courseDescription = remember { mutableStateOf(description) }
+    val Ighandle = remember { mutableStateOf(Ighandle) }
+    val Whatsappcontact = remember { mutableStateOf(Whatsappcontact) }
+    val Description = remember { mutableStateOf(description) }
 
     Column(modifier = Modifier
         .fillMaxHeight()
@@ -86,9 +86,9 @@ fun firebaseUI(context: Context,name: String?, duration: String?, description: S
         ) {
 
             TextField(
-                value = courseName.value.toString(),
-                onValueChange = { courseName.value = it },
-                placeholder = { Text(text = "Enter your course name") },
+                value = Ighandle.value.toString(),
+                onValueChange = { Ighandle.value = it },
+                placeholder = { Text(text = "Enter business IGhandle") },
                 modifier = Modifier
                     .padding(16.dp)
                     .fillMaxWidth(),
@@ -99,9 +99,9 @@ fun firebaseUI(context: Context,name: String?, duration: String?, description: S
             Spacer(modifier = Modifier.height(10.dp))
 
             TextField(
-                value = courseDuration.value.toString(),
-                onValueChange = { courseDuration.value = it },
-                placeholder = { Text(text = "Enter your course duration") },
+                value = Whatsappcontact.value.toString(),
+                onValueChange = { Whatsappcontact.value = it },
+                placeholder = { Text(text = "Enter business whatsappcontact") },
                 modifier = Modifier
                     .padding(16.dp)
                     .fillMaxWidth(),
@@ -112,9 +112,9 @@ fun firebaseUI(context: Context,name: String?, duration: String?, description: S
             Spacer(modifier = Modifier.height(10.dp))
 
             TextField(
-                value = courseDescription.value.toString(),
-                onValueChange = { courseDescription.value = it },
-                placeholder = { Text(text = "Enter your course description") },
+                value = Description.value.toString(),
+                onValueChange = { Description.value = it },
+                placeholder = { Text(text = "Enter your business/service description") },
                 modifier = Modifier
                     .padding(16.dp)
                     .fillMaxWidth(),
@@ -126,27 +126,26 @@ fun firebaseUI(context: Context,name: String?, duration: String?, description: S
 
             Button(
                 onClick = {
-                    if (TextUtils.isEmpty(courseName.value.toString())) {
-                        Toast.makeText(context, "Please enter course name", Toast.LENGTH_SHORT)
+                    if (TextUtils.isEmpty(Ighandle.value.toString())) {
+                        Toast.makeText(context, "Enter business IGhandle", Toast.LENGTH_SHORT)
                             .show()
-                    } else if (TextUtils.isEmpty(courseDuration.value.toString())) {
+                    } else if (TextUtils.isEmpty(Whatsappcontact.value.toString())) {
                         Toast.makeText(
                             context,
-                            "Please enter course Duration",
+                            "Enter business whatsappcontact",
                             Toast.LENGTH_SHORT
                         ).show()
-                    } else if (TextUtils.isEmpty(courseDescription.value.toString())) {
+                    } else if (TextUtils.isEmpty(Description.value.toString())) {
                         Toast.makeText(
                             context,
-                            "Please enter course description",
+                            "Enter your business/service description",
                             Toast.LENGTH_SHORT
                         ).show()
                     } else {
                         updateDataToFirebase(
-                            courseID,
-                            courseName.value,
-                            courseDuration.value,
-                            courseDescription.value,
+                            Ighandle.value,
+                            Whatsappcontact.value,
+                            Description.value,
                             context
                         )
                     }
@@ -162,22 +161,22 @@ fun firebaseUI(context: Context,name: String?, duration: String?, description: S
             Spacer(modifier = Modifier.height(10.dp))
 
             Button(
-                onClick = { deleteDataFromFirebase(courseID, context) },
+                onClick = { deleteDataFromFirebase(Ighandle, context) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp),
                 colors = ButtonDefaults.buttonColors(Color.Green)
             ) {
-                Text(text = "Delete Course", modifier = Modifier.padding(8.dp))
+                Text(text = "Delete data", modifier = Modifier.padding(8.dp))
             }
         }
 
     }
 }
 
-private fun deleteDataFromFirebase(courseID: String?, context: Context) {
+private fun deleteDataFromFirebase(Ighandle: MutableState<String?>, context: Context) {
     val db = FirebaseFirestore.getInstance();
-    db.collection("Courses").document(courseID.toString()).delete().addOnSuccessListener {
+    db.collection("Courses").document(Ighandle.toString()).delete().addOnSuccessListener {
         Toast.makeText(context, "Course Deleted successfully..", Toast.LENGTH_SHORT).show()
         context.startActivity(Intent(context, DetailsActivity::class.java))
     }.addOnFailureListener {
@@ -188,21 +187,21 @@ private fun deleteDataFromFirebase(courseID: String?, context: Context) {
 
 
 private fun updateDataToFirebase(
-    courseID: String?,
-    name: String?,
-    duration: String?,
+    Ighandle: String?,
+    Whatsappcontact: String?,
+
     description: String?,
     context: Context
 ) {
-    val updatedCourse = Courses(courseID, name, duration, description)
+    val updatedCourse = Upload(Ighandle, Whatsappcontact ,  description)
     val db = FirebaseFirestore.getInstance();
-    db.collection("Courses").document(courseID.toString()).set(updatedCourse)
+    db.collection("Courses").document(Ighandle.toString()).set(updatedCourse)
         .addOnSuccessListener {
-            Toast.makeText(context, "Course Updated successfully..", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, " Updated successfully..", Toast.LENGTH_SHORT).show()
             context.startActivity(Intent(context, DetailsActivity::class.java))
 
         }.addOnFailureListener {
-            Toast.makeText(context, "Fail to update course : " + it.message, Toast.LENGTH_SHORT)
+            Toast.makeText(context, "Fail to update  : " + it.message, Toast.LENGTH_SHORT)
                 .show()
         }
 }

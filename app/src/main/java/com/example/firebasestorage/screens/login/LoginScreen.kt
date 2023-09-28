@@ -2,8 +2,6 @@ package com.example.firebasestorage.screens.login
 
 import android.content.Intent
 import android.provider.Settings
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -22,13 +20,11 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.runtime.*
@@ -44,23 +40,22 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.airbnb.lottie.Lottie
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
-import com.example.firebasestorage.R
 import com.example.firebasestorage.data.AuthViewModel
-import com.example.firebasestorage.navigation.ROUT_LOGIN
 import com.example.firebasestorage.navigation.ROUT_SIGNUP
 
 @Composable
-fun LoginScreen(navController: NavHostController) {
+fun LoginScreen(viewModel: AuthViewModel?, navController: NavHostController) {
     var email by remember { mutableStateOf(TextFieldValue("")) }
     var password by remember { mutableStateOf(TextFieldValue("")) }
     var context = LocalContext.current
 
 
-    Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(modifier = Modifier.fillMaxSize() , horizontalAlignment = Alignment.CenterHorizontally) {
 
         //TopAppBar
         TopAppBar(title = { Text(text = "Sign in")},
@@ -89,12 +84,14 @@ fun LoginScreen(navController: NavHostController) {
                     Icon(imageVector = Icons.Filled.Settings , contentDescription = "settings")
                 }
             },
-            backgroundColor = Color.Green)
+            backgroundColor = Color.Cyan)
+
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        //Lottie Animation
-        val composition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.register))
+
+        Lottie Animation
+        val composition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.firstsplash))
         val progress by animateLottieCompositionAsState(composition )
 
         LottieAnimation(composition, progress,
@@ -137,7 +134,9 @@ fun LoginScreen(navController: NavHostController) {
             var xyz = AuthViewModel(navController, context)
             xyz.login(email.text,password.text)
         },
-            colors = ButtonDefaults.buttonColors(Color.Green),
+            colors = ButtonDefaults.buttonColors(Color.Cyan
+
+            ),
             modifier = Modifier.width(300.dp),
             shape = CutCornerShape(5.dp)) {
             Text(text = "Login")
@@ -155,5 +154,5 @@ fun LoginScreen(navController: NavHostController) {
 @Preview(showBackground = true)
 @Composable
 fun LoginScreenPreview() {
-    LoginScreen(rememberNavController())
+    LoginScreen(null, rememberNavController())
 }
